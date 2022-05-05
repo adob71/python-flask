@@ -32,5 +32,7 @@ class parentheses(Resource):
 api.add_resource(parentheses,'/parentheses/<string:str>')
 
 if __name__=='__main__':
-        app.run(debug=True, host="0.0.0.0", port=10002)
+#        app.run(debug=True, host="0.0.0.0", port=10002)
+        context = ('fullchain.pem', 'privkey.pem')
+        app.run(debug=True, host="0.0.0.0", port=10002, ssl_context=context)
 
