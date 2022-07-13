@@ -1,7 +1,7 @@
 ### CLI
 
 ```
-gce-user@node-1:~/github/blockchain-api$ python3 blockchain-api-client.py
+$ python3 blockchain-api-client.py
 Enter:
 get_chain
 mine_block
