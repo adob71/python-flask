@@ -11,7 +11,7 @@ Enter: mine_block, get_chain, valid
 
 [https://bitcoinexplorer.adob71.com:10001](https://bitcoinexplorer.adob71.com:10001)  
 {  
-  "Enter": "/mine_block, /get_chain, /valid"
+  "Enter": "/mine_block, /get_chain, /valid"  
 }  
 
 ### Project Structure
