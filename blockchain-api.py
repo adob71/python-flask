@@ -18,15 +18,28 @@ import simplejson as json
 # displaying the blockchain
 from flask import Flask, jsonify
 
+import os
 
 class Blockchain:
+
+    def load_chain(self):
+        with open('blockchain-api.json', 'r') as fp:
+            self.chain = json.load(fp)
+
+    def dump_chain(self):
+        with open("blockchain-api.json", "w") as fp:
+            json.dump(self.chain, fp)
 
     # This function is created
     # to create the very first
     # block and set its hash to "0"
     def __init__(self):
-        self.chain = []
-        self.create_block(proof=1, previous_hash='0')
+
+        if os.path.isfile("blockchain-api.json"):
+            self.load_chain()
+        else:
+            self.chain = []
+            self.create_block(proof=1, previous_hash='0')
 
     # This function is created
     # to add further blocks
@@ -37,11 +50,14 @@ class Blockchain:
                 'proof': proof,
                 'previous_hash': previous_hash}
         self.chain.append(block)
+
+        self.dump_chain()
+
         return block
     
     # This function is created
     # to display the previous block
-    def print_previous_block(self):
+    def get_previous_block(self):
         return self.chain[-1]
     
     # This is the function for proof of work
@@ -94,20 +110,22 @@ app = Flask(__name__)
 # of the class blockchain
 blockchain = Blockchain()
 
+@app.route('/', methods=['GET'])
+def enter():
+    response = {'Enter': '/mine_block, /get_chain, /valid'}
+    return jsonify(response), 200
+
 # Mining a new block
 @app.route('/mine_block', methods=['GET'])
 def mine_block():
-    previous_block = blockchain.print_previous_block()
+    previous_block = blockchain.get_previous_block()
     previous_proof = previous_block['proof']
     proof = blockchain.proof_of_work(previous_proof)
     previous_hash = blockchain.hash(previous_block)
     block = blockchain.create_block(proof, previous_hash)
     
     response = {'message': 'A block is MINED',
-                'index': block['index'],
-                'timestamp': block['timestamp'],
-                'proof': block['proof'],
-                'previous_hash': block['previous_hash']}
+                'block': block}
     
     return jsonify(response), 200
 
